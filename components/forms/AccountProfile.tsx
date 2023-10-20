@@ -9,9 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UserValidationSchema } from "@/validations/UserValidationSchema";
+import { updateUser } from "@/lib/actions/user.actions";
+import { useUploadThing } from "@/lib/uploadthing";
+import { isBase64Image } from "@/lib/utils";
+import { UserValidationSchema } from "@/lib/validations/UserValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -32,6 +36,10 @@ type AccountProfileProps = {
 
 const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
   const [files, setFiles] = useState<Array<File>>([]);
+  const { startUpload } = useUploadThing("media");
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof UserValidationSchema>>({
     resolver: zodResolver(UserValidationSchema),
@@ -68,11 +76,38 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
     }
   };
 
-  function onSubmit(values: z.infer<typeof UserValidationSchema>) {
+  const onSubmit = async (values: z.infer<typeof UserValidationSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+
+    const blob = values.profile_photo;
+
+    const hasImageChanged = isBase64Image(blob);
+
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+      if (imgRes && imgRes[0].url) {
+        values.profile_photo = imgRes[0].url;
+      } else {
+        console.log("Image couldn't get uploaded");
+      }
+    }
+
+    await updateUser({
+      userId: user.id,
+      username: values.username,
+      name: values.name,
+      bio: values.bio,
+      image: values.profile_photo,
+      path: pathname,
+    });
+
+    if (pathname === "/profile/edit") {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
 
   return (
     <Form {...form}>
