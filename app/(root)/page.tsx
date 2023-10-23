@@ -1,30 +1,38 @@
-"use client";
+import ThreadCards from "@/components/cards/ThreadCards";
+import { fetchPosts } from "@/lib/actions/thread.action";
+import { currentUser } from "@clerk/nextjs";
 
-import { UserButton, useUser } from "@clerk/nextjs";
-import Link from "next/link";
+export default async function Home() {
+  const result = await fetchPosts(1, 30);
 
-export default function Home() {
-  const { isLoaded, isSignedIn } = useUser();
+  const user = await currentUser();
 
-  if (!isLoaded) {
-    return <h1 className="head-text text-left text-neutral-950">Loading..!</h1>;
-  } else if (!isSignedIn) {
-    return (
-      <div className="flex flex-col justify-center items-center my-auto">
-        <h1 className="head-text text-white">Signed out..!</h1>
-        <Link href={"/sign-in"} className="mt-5">
-          <p className="text-white underline hover:text-cyan-400">
-            {"Sign-In>>>>"}
-          </p>
-        </Link>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <UserButton afterSignOutUrl="/" />
-        <h1 className="head-text text-left text-neutral-950">Hello /</h1>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1 className="head-text text-left text-neutral-950">Hello /</h1>
+      <section className="mt-9 flex flex-col gap-10">
+        {result.posts.length === 0 ? (
+          <p className="no-result">No threads found</p>
+        ) : (
+          <>
+            {result.posts.map((post) => {
+              return (
+                <ThreadCards
+                  key={post._id}
+                  id={post._id}
+                  currentUserId={user?.id ?? ""}
+                  parentId={post?.parentId}
+                  content={post?.text}
+                  author={post?.author}
+                  community={post?.community}
+                  createdAt={post?.createdAt}
+                  comments={post?.children}
+                />
+              );
+            })}
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
