@@ -52,6 +52,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: CommentProps) => {
             <FormItem className="flex items-center gap-3 w-full">
               <FormLabel>
                 <Image
+                  priority={true}
                   src={currentUserImg}
                   alt="Profile Image"
                   width={48}

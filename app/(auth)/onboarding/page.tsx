@@ -1,10 +1,12 @@
 import AccountProfile from "@/components/forms/AccountProfile";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const user = await currentUser();
 
-  const userInfo = {};
+  const userInfo = await fetchUser(user?.id ?? "");
 
   const userData = {
     id: user?.id || "",
@@ -14,6 +16,8 @@ const page = async () => {
     bio: userInfo?.bio || "",
     image: userInfo?.image || user?.imageUrl,
   };
+
+  if (userInfo?.onboarded) redirect("/");
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-20">

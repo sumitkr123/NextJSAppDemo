@@ -27,6 +27,7 @@ const BottomBar = () => {
               }`}
             >
               <Image
+                priority={true}
                 src={link.imgURL}
                 alt={link.label}
                 width={24}

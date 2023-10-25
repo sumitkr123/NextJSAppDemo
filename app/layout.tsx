@@ -5,7 +5,7 @@ import TopBar from "@/components/shared/TopBar";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["cyrillic"] });
 
@@ -35,7 +35,9 @@ export default function RootLayout({
             </SignedIn>
             <SignedOut>
               <section className="main-container">
-                <div className="w-full max-w-4xl">{children}</div>
+                <div className="w-full max-w-4xl flex flex-1 justify-center items-center">
+                  {children}
+                </div>
               </section>
             </SignedOut>
           </main>

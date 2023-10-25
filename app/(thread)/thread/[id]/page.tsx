@@ -4,8 +4,13 @@ import { fetchThreadByID } from "@/lib/actions/thread.action";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { FunctionComponent } from "react";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+type CommentPageProps = {
+  params: { id: string };
+};
+
+const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
   if (!params.id) return null;
 
   const user = await currentUser();
@@ -29,6 +34,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         community={thread.community}
         createdAt={thread.createdAt}
         comments={thread.children}
+        isComment
       />
 
       <div className="mt-7">
@@ -42,18 +48,20 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <div className="mt-10">
         {thread.children.map((child: any) => {
           return (
-            <ThreadCards
-              key={child._id}
-              id={child._id}
-              currentUserId={child?.id ?? ""}
-              parentId={child.parentId}
-              content={child.text}
-              author={child.author}
-              community={child.community}
-              createdAt={child.createdAt}
-              comments={child.children}
-              isComment
-            />
+            <div key={child._id.toString()} className="mt-10">
+              <ThreadCards
+                key={child._id}
+                id={child._id}
+                currentUserId={child?.id ?? ""}
+                parentId={child.parentId}
+                content={child.text}
+                author={child.author}
+                community={child.community}
+                createdAt={child.createdAt}
+                comments={child.children}
+                isComment
+              />
+            </div>
           );
         })}
       </div>
@@ -61,4 +69,4 @@ const Page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default Page;
+export default CommentPage;

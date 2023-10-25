@@ -129,11 +129,11 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   />
                 ) : (
                   <Image
+                    priority={true}
                     src={"/assets/profile.svg"}
                     alt="Profile-Photo"
                     width={24}
                     height={24}
-                    priority
                     className="object-contain"
                   />
                 )}

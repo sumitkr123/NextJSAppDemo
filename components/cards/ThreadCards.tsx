@@ -47,6 +47,7 @@ const ThreadCards = ({
           <div className="flex flex-col items-center">
             <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
               <Image
+                priority={true}
                 src={author.image}
                 alt="Profile Photo"
                 fill
@@ -69,6 +70,7 @@ const ThreadCards = ({
             <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3.5">
                 <Image
+                  priority={true}
                   src={"/assets/heart-gray.svg"}
                   alt="heart"
                   width={24}
@@ -77,6 +79,7 @@ const ThreadCards = ({
                 />
                 <Link href={`/thread/${id}`}>
                   <Image
+                    priority={true}
                     src={"/assets/reply.svg"}
                     alt="reply"
                     width={24}
@@ -85,6 +88,7 @@ const ThreadCards = ({
                   />
                 </Link>
                 <Image
+                  priority={true}
                   src={"/assets/repost.svg"}
                   alt="repost"
                   width={24}
@@ -92,6 +96,7 @@ const ThreadCards = ({
                   className="object-contain cursor-pointer"
                 />
                 <Image
+                  priority={true}
                   src={"/assets/share.svg"}
                   alt="share"
                   width={24}

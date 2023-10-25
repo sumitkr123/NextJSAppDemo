@@ -29,6 +29,7 @@ const LeftSideBar = () => {
               }`}
             >
               <Image
+                priority={true}
                 src={link.imgURL}
                 alt={link.label}
                 width={24}
@@ -49,6 +50,7 @@ const LeftSideBar = () => {
           >
             <div className="flex cursor-pointer gap-4 p-4 hover:bg-primary-500 hover:bg-opacity-40 leftsidebar_link">
               <Image
+                priority={true}
                 src={"/assets/logout.svg"}
                 alt="logout"
                 width={24}
