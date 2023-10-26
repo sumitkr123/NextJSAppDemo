@@ -2,6 +2,7 @@ import BottomBar from "@/components/shared/BottomBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import RightSideBar from "@/components/shared/RightSideBar";
 import TopBar from "@/components/shared/TopBar";
+import { ThemeProvider } from "@/provider/theme-provider";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -24,22 +25,29 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <main className="flex flex-row">
-            <TopBar />
-            <SignedIn>
-              <LeftSideBar />
-              <section className="main-container">
-                <div className="w-full max-w-4xl">{children}</div>
-              </section>
-              <RightSideBar />
-              <BottomBar />
-            </SignedIn>
-            <SignedOut>
-              <section className="main-container">
-                <div className="w-full max-w-4xl flex flex-1 justify-center items-center">
-                  {children}
-                </div>
-              </section>
-            </SignedOut>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <TopBar />
+              <SignedIn>
+                <LeftSideBar />
+                <section className="main-container">
+                  <div className="w-full max-w-4xl">{children}</div>
+                </section>
+                <RightSideBar />
+                <BottomBar />
+              </SignedIn>
+              <SignedOut>
+                <section className="main-container">
+                  <div className="w-full max-w-4xl flex flex-1 justify-center items-center">
+                    {children}
+                  </div>
+                </section>
+              </SignedOut>
+            </ThemeProvider>
           </main>
         </body>
       </html>

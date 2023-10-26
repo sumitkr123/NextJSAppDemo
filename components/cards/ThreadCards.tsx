@@ -36,6 +36,8 @@ const ThreadCards = ({
   comments,
   isComment,
 }: ThreadCardProps) => {
+  console.log(content, "content");
+
   return (
     <article
       className={`card flex w-full flex-col rounded-xl ${
@@ -65,7 +67,9 @@ const ThreadCards = ({
               </h4>
             </Link>
 
-            <p className="mt-2 text-small-regular text-light-2">{content}</p>
+            <p className="mt-2 text-small-regular text-light-2 whitespace-pre-line">
+              {content}
+            </p>
 
             <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3.5">

@@ -29,15 +29,11 @@ export async function createThread({
   try {
     connectToDB();
 
-    console.log("creating thread");
-
     const createdThread = await Thread.create({
       text,
       author,
       community: null,
     });
-
-    console.log(createdThread, "created thread");
 
     await User.findByIdAndUpdate(
       author,

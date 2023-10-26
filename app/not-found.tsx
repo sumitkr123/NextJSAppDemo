@@ -23,7 +23,7 @@ const NotFound: FunctionComponent<NotFoundProps> = () => {
 
           <Link
             href={"/"}
-            className="link_404 text-light-2 bg-indigo-500 rounded-xl p-3 text-[18px] hover:scale-110 hover:underline"
+            className="link_404 text-white text-body-semibold rounded-xl p-3 text-[18px] hover:scale-110 hover:underline"
           >
             Go to Home
           </Link>
