@@ -13,10 +13,11 @@ import { updateUser } from "@/lib/actions/user.actions";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
 import { UserValidationSchema } from "@/lib/validations/UserValidationSchema";
+import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "../ui/button";
@@ -34,12 +35,16 @@ type AccountProfileProps = {
   btnTitle: string;
 };
 
-const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
+const AccountProfile: FunctionComponent<AccountProfileProps> = ({
+  user,
+  btnTitle,
+}) => {
   const [files, setFiles] = useState<Array<File>>([]);
   const { startUpload } = useUploadThing("media");
 
   const router = useRouter();
   const pathname = usePathname();
+  const useUserFunc = useUser();
 
   const form = useForm<z.infer<typeof UserValidationSchema>>({
     resolver: zodResolver(UserValidationSchema),
@@ -51,7 +56,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
     },
   });
 
-  const handleImage = (
+  const handleImage = async (
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
   ) => {
@@ -61,6 +66,10 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
 
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+
+      await useUserFunc.user?.setProfileImage({
+        file: file,
+      });
 
       setFiles(Array.from(e.target.files));
 
@@ -92,6 +101,10 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
         console.log("Image couldn't get uploaded");
       }
     }
+
+    await useUserFunc.user?.update({
+      username: values.username,
+    });
 
     await updateUser({
       userId: user.id,

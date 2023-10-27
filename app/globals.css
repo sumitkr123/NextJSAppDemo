@@ -63,7 +63,7 @@
   }
 
   .bottombar {
-    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden;
+    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 lg:hidden;
   }
 
   .bottombar_container {
@@ -237,4 +237,10 @@
   height: 400px;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+@media (max-width: 30em) {
+  .cl-internal-rx251b {
+    max-width: calc(-2.75rem + 100vw);
+  }
 }

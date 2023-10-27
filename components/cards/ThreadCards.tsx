@@ -81,7 +81,7 @@ const ThreadCards = ({
                   height={24}
                   className="object-contain cursor-pointer"
                 />
-                <Link href={`/thread/${id}`}>
+                <Link href={`/thread/${id}`} className="flex flex-row">
                   <Image
                     priority={true}
                     src={"/assets/reply.svg"}
@@ -90,6 +90,15 @@ const ThreadCards = ({
                     height={24}
                     className="object-contain cursor-pointer"
                   />
+                  {!isComment && comments.length > 0 && (
+                    <div className="bg-red-600 rounded-full justify-center items-center flex flex-1 h-[16px] w-[16px] absolute ml-[13px] mt-[-4px]">
+                      <span className="text-subtle-medium text-light-1">
+                        {comments.length >= 10
+                          ? comments.length.toString() + "+"
+                          : comments.length}
+                      </span>
+                    </div>
+                  )}
                 </Link>
                 <Image
                   priority={true}
@@ -110,10 +119,11 @@ const ThreadCards = ({
               </div>
 
               {isComment && comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {comments.length} replies
-                  </p>
+                <Link
+                  href={`/thread/${id}`}
+                  className="w-fit mt-1 inline-flex text-subtle-medium text-gray-1"
+                >
+                  {comments.length} replies
                 </Link>
               )}
             </div>

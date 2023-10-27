@@ -18,7 +18,7 @@ const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
 
   const userInfo = await fetchUser(user.id);
 
-  if (!userInfo.onboarded) redirect("/onboarding");
+  if (!userInfo?.onboarded) redirect("/onboarding");
 
   const thread = await fetchThreadByID(params.id);
 

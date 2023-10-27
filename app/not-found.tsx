@@ -5,7 +5,7 @@ type NotFoundProps = {};
 
 const NotFound: FunctionComponent<NotFoundProps> = () => {
   return (
-    <div className="top-0 left-0 w-full h-full flex flex-col justify-center items-center gap-5 fixed z-50 bg-white">
+    <div className="top-0 left-0 w-full h-full overflow-y-auto flex flex-col justify-center items-center gap-5 fixed z-50 bg-white">
       <div className="col-sm-10 text-center">
         <div className="four_zero_four_bg">
           <h1 className="text-center text-heading2-bold text-green-700">404</h1>
