@@ -20,6 +20,12 @@ type AddCommentToThreadParams = {
   path: string;
 };
 
+type AddLikesToThreadParams = {
+  threadId: string;
+  userId: string;
+  path: string;
+};
+
 export async function createThread({
   text,
   author,
@@ -161,5 +167,27 @@ export async function addCommentToThread({
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Error while adding comment to thread: ${error.message}`);
+  }
+}
+
+export async function addLikesToThread({
+  threadId,
+  userId,
+  path,
+}: AddLikesToThreadParams) {
+  try {
+    connectToDB();
+
+    await Thread.findByIdAndUpdate(
+      threadId,
+      {
+        $push: { likes: userId },
+      },
+      { upsert: true }
+    );
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Error while adding like to thread: ${error.message}`);
   }
 }

@@ -17,14 +17,14 @@ const PostFeed = ({ posts, user }: PostFeedProps) => {
             return (
               <ThreadCards
                 key={post._id}
-                id={post._id}
+                id={JSON.stringify(post._id)}
                 currentUserId={user?.id ?? ""}
-                parentId={post?.parentId}
+                parentId={JSON.stringify(post?.parentId)}
                 content={post?.text}
-                author={post?.author}
+                author={JSON.stringify(post?.author)}
                 community={post?.community}
                 createdAt={post?.createdAt}
-                comments={post?.children}
+                comments={JSON.stringify(post?.children)}
               />
             );
           })}

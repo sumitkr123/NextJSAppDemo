@@ -1,27 +1,35 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useMemo, useState } from "react";
 
 export type ThreadCardProps = {
   id: string;
   currentUserId: string;
   parentId: string | null;
   content: string;
-  author: {
-    name: string;
-    image: string;
-    id: string;
-  };
+  author:
+    | {
+        name: string;
+        image: string;
+        id: string;
+      }
+    | string;
   community: {
     id: string;
     name: string;
     image: string;
   } | null;
   createdAt: string;
-  comments: Array<{
-    author: {
-      image: string;
-    };
-  }>;
+  comments:
+    | Array<{
+        author: {
+          image: string;
+        };
+      }>
+    | string;
   isComment?: boolean;
 };
 
@@ -36,7 +44,49 @@ const ThreadCards = ({
   comments,
   isComment,
 }: ThreadCardProps) => {
-  console.log(content, "content");
+  const [threadLiked, setThreadLiked] = useState(false);
+
+  const pathName = usePathname();
+
+  const newId = useMemo(() => {
+    if (id) {
+      if (typeof id === "string") {
+        return JSON.parse(id);
+      } else {
+        return id;
+      }
+    }
+  }, [id]);
+
+  const newAuthor = useMemo<{
+    name: string;
+    image: string;
+    id: string;
+  }>(() => {
+    if (author) {
+      if (typeof author === "string") {
+        return JSON.parse(author);
+      } else {
+        return author;
+      }
+    }
+  }, [author]);
+
+  const newComments = useMemo<
+    Array<{
+      author: {
+        image: string;
+      };
+    }>
+  >(() => {
+    if (comments) {
+      if (typeof comments === "string") {
+        return JSON.parse(comments);
+      } else {
+        return comments;
+      }
+    }
+  }, [comments]);
 
   return (
     <article
@@ -47,10 +97,13 @@ const ThreadCards = ({
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4 ">
           <div className="flex flex-col items-center">
-            <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
+            <Link
+              href={`/profile/${newAuthor.id}`}
+              className="relative h-11 w-11"
+            >
               <Image
                 priority={true}
-                src={author.image}
+                src={newAuthor.image}
                 alt="Profile Photo"
                 fill
                 className="cursor-pointer rounded-full"
@@ -61,9 +114,9 @@ const ThreadCards = ({
           </div>
 
           <div className="flex w-full flex-col">
-            <Link href={`/profile/${author.id}`} className="h-11 w-11">
+            <Link href={`/profile/${newAuthor.id}`} className="h-11 w-11">
               <h4 className="cursor-pointer text-base-semibold text-light-1">
-                {author.name}
+                {newAuthor.name}
               </h4>
             </Link>
 
@@ -75,13 +128,25 @@ const ThreadCards = ({
               <div className="flex gap-3.5">
                 <Image
                   priority={true}
-                  src={"/assets/heart-gray.svg"}
+                  src={
+                    threadLiked
+                      ? "/assets/heart-filled.svg"
+                      : "/assets/heart-gray.svg"
+                  }
                   alt="heart"
                   width={24}
                   height={24}
                   className="object-contain cursor-pointer"
+                  onClick={() => {
+                    // await addLikesToThread({
+                    //   path: pathName,
+                    //   threadId: newId,
+                    //   userId: newAuthor.id,
+                    // });
+                    setThreadLiked((prev) => !prev);
+                  }}
                 />
-                <Link href={`/thread/${id}`} className="flex flex-row">
+                <Link href={`/thread/${newId}`} className="flex flex-row">
                   <Image
                     priority={true}
                     src={"/assets/reply.svg"}
@@ -90,12 +155,12 @@ const ThreadCards = ({
                     height={24}
                     className="object-contain cursor-pointer"
                   />
-                  {!isComment && comments.length > 0 && (
+                  {!isComment && newComments.length > 0 && (
                     <div className="bg-red-600 rounded-full justify-center items-center flex flex-1 h-[16px] w-[16px] absolute ml-[13px] mt-[-4px]">
                       <span className="text-subtle-medium text-light-1">
-                        {comments.length >= 10
-                          ? comments.length.toString() + "+"
-                          : comments.length}
+                        {newComments.length >= 10
+                          ? newComments.length.toString() + "+"
+                          : newComments.length}
                       </span>
                     </div>
                   )}
@@ -118,12 +183,12 @@ const ThreadCards = ({
                 />
               </div>
 
-              {isComment && comments.length > 0 && (
+              {isComment && newComments.length > 0 && (
                 <Link
-                  href={`/thread/${id}`}
+                  href={`/thread/${newId}`}
                   className="w-fit mt-1 inline-flex text-subtle-medium text-gray-1"
                 >
-                  {comments.length} replies
+                  {newComments.length} replies
                 </Link>
               )}
             </div>

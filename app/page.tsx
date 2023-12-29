@@ -8,6 +8,10 @@ type HomeProps = {};
 
 const Home: FunctionComponent<HomeProps> = async () => {
   const result = await fetchPosts(1, 30);
+  console.log(
+    "🚀 ~ file: page.tsx:11 ~ constHome:FunctionComponent<HomeProps>= ~ result:",
+    result.posts[0]
+  );
 
   const user = await currentUser();
 

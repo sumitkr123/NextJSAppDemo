@@ -26,14 +26,14 @@ const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
     <section className="relative">
       <ThreadCards
         key={thread._id}
-        id={thread._id}
+        id={JSON.stringify(thread._id)}
         currentUserId={user?.id ?? ""}
-        parentId={thread.parentId}
+        parentId={JSON.stringify(thread.parentId)}
         content={thread.text}
-        author={thread.author}
+        author={JSON.stringify(thread.author)}
         community={thread.community}
         createdAt={thread.createdAt}
-        comments={thread.children}
+        comments={JSON.stringify(thread.children)}
         isComment
       />
 
@@ -51,14 +51,14 @@ const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
             <div key={child._id.toString()} className="mt-10">
               <ThreadCards
                 key={child._id}
-                id={child._id}
+                id={JSON.stringify(child._id)}
                 currentUserId={child?.id ?? ""}
-                parentId={child.parentId}
+                parentId={JSON.stringify(child.parentId)}
                 content={child.text}
-                author={child.author}
+                author={JSON.stringify(child.author)}
                 community={child.community}
                 createdAt={child.createdAt}
-                comments={child.children}
+                comments={JSON.stringify(child.children)}
                 isComment
               />
             </div>
