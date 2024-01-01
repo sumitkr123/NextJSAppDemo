@@ -1,8 +1,9 @@
+import { FunctionComponent } from "react";
+
 import PostFeed from "@/components/posts/PostFeed";
 import { fetchPosts } from "@/lib/actions/thread.action";
 import { currentUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { FunctionComponent } from "react";
 
 type HomeProps = {};
 

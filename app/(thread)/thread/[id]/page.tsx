@@ -1,14 +1,12 @@
+import { FunctionComponent } from "react";
+
 import ThreadCards from "@/components/cards/ThreadCards";
 import Comment from "@/components/forms/Comment";
 import { fetchThreadByID } from "@/lib/actions/thread.action";
 import { fetchUser } from "@/lib/actions/user.actions";
+import { CommentPageProps } from "@/types";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { FunctionComponent } from "react";
-
-type CommentPageProps = {
-  params: { id: string };
-};
 
 const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
   if (!params.id) return null;

@@ -1,3 +1,5 @@
+import React from "react";
+
 import BottomBar from "@/components/shared/BottomBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import RightSideBar from "@/components/shared/RightSideBar";

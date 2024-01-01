@@ -1,13 +1,10 @@
-import PostThread from "@/components/forms/PostThread";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import { FunctionComponent } from "react";
 
-type CreateThreadProps = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+import PostThread from "@/components/forms/PostThread";
+import { fetchUser } from "@/lib/actions/user.actions";
+import { CreateThreadProps } from "@/types";
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 const CreateThread: FunctionComponent<CreateThreadProps> = async (props) => {
   const user = await currentUser();

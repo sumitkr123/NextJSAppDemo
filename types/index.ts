@@ -55,3 +55,12 @@ export type ThreadCardProps = {
   isComment?: boolean;
   isThreadLiked?: boolean;
 };
+
+export type CommentPageProps = {
+  params: { id: string };
+};
+
+export type CreateThreadProps = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
