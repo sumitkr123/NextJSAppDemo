@@ -2,29 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 
+import {
+  AddCommentToThreadParams,
+  AddLikesToThreadParams,
+  ThreadParams,
+} from "@/types";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-
-type ThreadParams = {
-  text: string;
-  author: string;
-  communityId: string | null;
-  path: string;
-};
-
-type AddCommentToThreadParams = {
-  threadId: string;
-  commentText: string;
-  userId: string;
-  path: string;
-};
-
-type AddLikesToThreadParams = {
-  threadId: string;
-  userId: string;
-  path: string;
-};
 
 export async function createThread({
   text,
@@ -81,7 +66,8 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
           model: User,
           select: "_id name parentId image",
         },
-      });
+      })
+      .populate("likes");
 
     const totalPostsCount = await Thread.countDocuments({
       parentId: { $in: [null, undefined] },
@@ -101,8 +87,12 @@ export async function fetchThreadByID(id: string) {
   try {
     connectToDB();
 
-    // TODO: Populate community..
     const thread = await Thread.findById(id)
+      .populate({
+        path: "likes",
+        model: User,
+        select: "_id id name image",
+      })
       .populate({
         path: "author",
         model: User,
@@ -178,13 +168,39 @@ export async function addLikesToThread({
   try {
     connectToDB();
 
+    const user = await User.findOne({
+      id: userId,
+    });
+
     await Thread.findByIdAndUpdate(
       threadId,
       {
-        $push: { likes: userId },
+        $push: { likes: user._id },
       },
       { upsert: true }
     );
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Error while adding like to thread: ${error.message}`);
+  }
+}
+
+export async function removeLikesFromThread({
+  threadId,
+  userId,
+  path,
+}: AddLikesToThreadParams) {
+  try {
+    connectToDB();
+
+    const user = await User.findOne({
+      id: userId,
+    });
+
+    await Thread.findByIdAndUpdate(threadId, {
+      $pullAll: { likes: [user._id] },
+    });
 
     revalidatePath(path);
   } catch (error: any) {

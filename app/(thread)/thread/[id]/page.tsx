@@ -35,6 +35,11 @@ const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
         createdAt={thread.createdAt}
         comments={JSON.stringify(thread.children)}
         isComment
+        isThreadLiked={
+          [...thread.likes].some((likeduser: { id: string | undefined }) => {
+            return likeduser.id === user?.id;
+          }) ?? false
+        }
       />
 
       <div className="mt-7">
@@ -60,6 +65,13 @@ const CommentPage: FunctionComponent<CommentPageProps> = async ({ params }) => {
                 createdAt={child.createdAt}
                 comments={JSON.stringify(child.children)}
                 isComment
+                isThreadLiked={
+                  [...child.likes].some(
+                    (likeduser: { id: string | undefined }) => {
+                      return likeduser.id === user?.id;
+                    }
+                  ) ?? false
+                }
               />
             </div>
           );

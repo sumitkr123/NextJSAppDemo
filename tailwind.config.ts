@@ -195,6 +195,8 @@ module.exports = {
       },
       screens: {
         xs: "400px",
+        "2xs": "300px",
+        "3xs": "250px",
       },
       keyframes: {
         "accordion-down": {

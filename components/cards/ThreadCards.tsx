@@ -1,37 +1,14 @@
 "use client";
 
+import {
+  addLikesToThread,
+  removeLikesFromThread,
+} from "@/lib/actions/thread.action";
+import { ThreadCardProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-
-export type ThreadCardProps = {
-  id: string;
-  currentUserId: string;
-  parentId: string | null;
-  content: string;
-  author:
-    | {
-        name: string;
-        image: string;
-        id: string;
-      }
-    | string;
-  community: {
-    id: string;
-    name: string;
-    image: string;
-  } | null;
-  createdAt: string;
-  comments:
-    | Array<{
-        author: {
-          image: string;
-        };
-      }>
-    | string;
-  isComment?: boolean;
-};
 
 const ThreadCards = ({
   id,
@@ -43,8 +20,9 @@ const ThreadCards = ({
   createdAt,
   comments,
   isComment,
+  isThreadLiked,
 }: ThreadCardProps) => {
-  const [threadLiked, setThreadLiked] = useState(false);
+  const [threadLiked, setThreadLiked] = useState(isThreadLiked ?? false);
 
   const pathName = usePathname();
 
@@ -87,6 +65,24 @@ const ThreadCards = ({
       }
     }
   }, [comments]);
+
+  const hadleLikeOnThread = async () => {
+    if (threadLiked) {
+      await removeLikesFromThread({
+        path: pathName,
+        threadId: newId,
+        userId: currentUserId,
+      });
+      setThreadLiked(false);
+    } else {
+      await addLikesToThread({
+        path: pathName,
+        threadId: newId,
+        userId: currentUserId,
+      });
+      setThreadLiked(true);
+    }
+  };
 
   return (
     <article
@@ -137,14 +133,7 @@ const ThreadCards = ({
                   width={24}
                   height={24}
                   className="object-contain cursor-pointer"
-                  onClick={() => {
-                    // await addLikesToThread({
-                    //   path: pathName,
-                    //   threadId: newId,
-                    //   userId: newAuthor.id,
-                    // });
-                    setThreadLiked((prev) => !prev);
-                  }}
+                  onClick={hadleLikeOnThread}
                 />
                 <Link href={`/thread/${newId}`} className="flex flex-row">
                   <Image

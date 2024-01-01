@@ -7,7 +7,7 @@ type ErrorProps = {
   reset: () => void;
 };
 
-const Error: FunctionComponent<ErrorProps> = ({ error, reset }) => {
+const ErrorPage: FunctionComponent<ErrorProps> = ({ error, reset }) => {
   return (
     <div>
       <h2>Something went wrong!</h2>
@@ -23,4 +23,4 @@ const Error: FunctionComponent<ErrorProps> = ({ error, reset }) => {
   );
 };
 
-export default Error;
+export default ErrorPage;

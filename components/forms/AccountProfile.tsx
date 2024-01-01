@@ -135,9 +135,9 @@ const AccountProfile: FunctionComponent<AccountProfileProps> = ({
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form_image-label">
                 {field.value ? (
-                  <img
+                  <Image
                     src={field.value}
-                    alt="Profile-Photo"
+                    alt="profile_photo123"
                     className="object-fill rounded-full w-24 h-24"
                   />
                 ) : (
